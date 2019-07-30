@@ -1,0 +1,10 @@
+# Ignore all
+*
+
+# Unignore all w/ extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
+### ABOVE WILL IGNORE ALL FILES W/O EXTENSIONS ###
