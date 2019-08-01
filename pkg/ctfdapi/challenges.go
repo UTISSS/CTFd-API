@@ -14,7 +14,7 @@ func (clt *Client) CreateChallenge(challenge *ChallengeRequest) error {
 		Method: "POST",
 		Path:   "api/v1/challenges",
 		Data:   challenge}
-	httpReq, err := clt.RawRequest(&req)
+	httpReq, err := clt.JsonRawRequest(&req)
 	if err != nil {
 		return err
 	}

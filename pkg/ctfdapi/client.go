@@ -4,16 +4,18 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 )
 
-/* TODO: should probably move everything except cookie to a config struct so that people can create multiple clients with slightly different configurations */
 type Client struct {
-	BaseURL    string
-	UserAgent  string
+	Config     ClientConfig
 	HttpClient *http.Client
 	cookie     *http.Cookie
+}
+
+type ClientConfig struct {
+	BaseURL   string
+	UserAgent string
 }
 
 type Request struct {
@@ -27,8 +29,8 @@ func (clt *Client) JsonRawRequest(req *Request) (*http.Request, error) {
 		return nil, fmt.Errorf("request is nil")
 	}
 
-	url := clt.BaseURL + req.Path
-	data, err := Json.Marshal(req.Data)
+	url := clt.Config.BaseURL + req.Path
+	data, err := json.Marshal(req.Data)
 	if err != nil {
 		return nil, err
 	}
@@ -38,8 +40,8 @@ func (clt *Client) JsonRawRequest(req *Request) (*http.Request, error) {
 		return nil, err
 	}
 	httpReq.Header.Set("Content-Type", "application/json")
-	if clt.UserAgent != "" {
-		httpReq.Header.Set("User-Agent", clt.UserAgent)
+	if clt.Config.UserAgent != "" {
+		httpReq.Header.Set("User-Agent", clt.Config.UserAgent)
 	}
 	if clt.cookie != nil {
 		httpReq.AddCookie(clt.cookie)
